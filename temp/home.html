@@ -1,0 +1,93 @@
+<!DOCTYPE html> <html lang="en"> <head>
+    <meta charset="UTF-8">
+    <title>shotsaic</title>
+    <script 
+src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script></head> 
+<style type="text/css"> .tg {border-collapse:collapse;border-spacing:0;} 
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 
+5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:black;} 
+.tg th{font-family:Arial, 
+sans-serif;font-size:14px;font-weight:normal;padding:10px 
+5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;} 
+.tg .tg-0lax{text-align:left;vertical-align:top} </style> 
+<script>function getImages() { var num_of_images= 
+$('#num_of_images').val(); var first_img_id= $('#first_img_id').val();
+  $.ajax({
+              url: "/get_images",
+              type: "POST",
+              data: {num_of_images:num_of_images,
+              first_img_id:first_img_id} }).done(function(response) { 
+var html= ""; response =response.result;
+                 $.each(response,function(key,val){
+                 console.log(val);
+                    html+="<p>"+val+"<p>" });
+                html +="<br>";
+                $(".show-data").append(html);
+            });
+}; </script>
+<script>function makeMosaic(){ var tile_width=$('#tile_width').val(); 
+var enlargement=$('#enlargement').val(); var 
+img_mode=$('.img_mode:checked').val();
+ $.ajax({
+              url: "/make_mosaic",
+              type: "POST",
+              data: {tile_width:tile_width, enlargement:enlargement, 
+img_mode:img_mode} }).done(function(response) { var html= " "; response 
+=response.result;
+                 $.each(response,function(key,val,sral){
+                 console.log(val);
+                    html+="<p>"+val+"<p>" });
+                html +="<br>";
+                $(".show-data").append(html);
+            });
+};
+</script> <body>
+    <p>
+        </p> <table>
+  <tr> <th class="tg-0pky"> <table class="tg">
+  <tr>
+    <th class="tg-0lax">Get some images</th>
+    <th class="tg-0lax">Generate mosaic</th>
+  </tr>
+ <tr> 
+<td class="tg-0lax"></td>
+ <td class="tg-0lax"> <form action 
+= "/uploader" method = "POST"
+         enctype = "multipart/form-data">
+         <input type = "file" name = "file" />
+         <input type = "submit"/>
+      </form> </td>
+  <tr>
+    <td class="tg-0lax">Number of images<input type="number" 
+id="num_of_images" name="num_of_images" value="500"></td>
+            
+    <td class="tg-0lax">Tile width<input type="number" id="tile_width" 
+name="tile_width" value="50"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">First ID<input type="text" id="first_img_id" 
+name="first_img_id" value="abc123" maxlength="6"></td>
+            
+    <td class="tg-0lax">Enlargement<input type="number" id="enlargement" 
+name="enlargement" value="10"></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax"><button id="clicked" 
+onclick="getImages()">GETSOME!</button></td>
+    <td class="tg-0lax">Mode<br> <input type="radio" id="RGB" 
+name="img_mode" class="img_mode" value="RGB" checked> <label 
+for="RGB">RGB</label></input><br> <input type="radio" id="L" 
+name="img_mode" class="img_mode" value="L"> <label 
+for="L">Grayscale</label></input><br> </td>
+  </tr>
+  <tr>
+    <td class="tg-0lax"><br><a href="static/history.html">older 
+mosaics</a></td>
+    <td class="tg-0lax"><button id="clicke" 
+onclick="makeMosaic()">MAKESOME!</button></td>
+  </tr> </table> </th>
+    <th class="tg-0pky"> <div class="show-data" > </div> </th>
+  </tr> </table> 
+<div><b><p>Please be aware that this code is not perfect, server is not the fastest and i'm not the smartest so please be patient. Your job will not be lost, please visit history from time to time to find out if it's done. I might add some progress display to inform but for now it works so meh. it just takes a long time. Also only one job at a time. To find out how many images are available just set it to download one image.</p></b></div>
+</body>
+</html>
